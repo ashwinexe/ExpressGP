@@ -5,18 +5,18 @@ const app = express();
 app.use(express.json());
 
 const genres = [
-    {id: 1, genre:'action'},
-    {id: 2, genre:'horror'},
-    {id: 3, genre:'comedy'},
-    {id: 4, genre:'shreya'},
+    {id: 1, restaurant:'Indian'},
+    {id: 2, restaurant:'Chinese'},
+    {id: 3, restaurant:'Thai'},
+    {id: 4, restaurant:'Western'},
 
 ];
 
-app.get('/genre', (req, res) => {
+app.get('/restaurant', (req, res) => {
     res.send(genres);
 });
 
-app.post('/genre', (req, res) => {
+app.post('/restaurant', (req, res) => {
     
     const { error } = validateGenre(req.body)
     if(error) return res.status(404).send(error.details[0].message);
@@ -30,21 +30,21 @@ app.post('/genre', (req, res) => {
     res.send(new_genre);
 });
 
-app.put('/genre/:genre', (req, res) => {
-    const find_genre = genres.find(x => x.genre === req.params.genre);
+app.put('/restaurant/:restaurant', (req, res) => {
+    const find_genre = genres.find(x => x.restaurant === req.params.genre);
 
     if(!find_genre)
         return res.status(404).send('Genre not found!');
 
-        find_genre.genre = req.body.genre
+        find_genre.restaurant = req.body.genre
         res.send(genres);
 });
 
-app.delete('/genre/:genre', (req, res) => {
-    const find_genre = genres.find( x => x.genre === req.params.genre);
+app.delete('/restaurant/:restaurant', (req, res) => {
+    const find_genre = genres.find( x => x.restaurant === req.params.genre);
 
     if(!find_genre)
-        return res.status(404).send('Genre not found!');
+        return res.status(404).send('Restaurant not found!');
     
     const index = genres.indexOf(find_genre);
     genres.splice(index, 1);
@@ -53,12 +53,12 @@ app.delete('/genre/:genre', (req, res) => {
 
 });
 
-function validateGenre(genres) {
+function validateGenre(restaurant) {
     const schema = Joi.object({
         genre: Joi.string().min(3).required()
     });
 
-    return schema.validate(genres);
+    return schema.validate(restaurant);
 }
 
 const port = process.env.PORT || 3000;
